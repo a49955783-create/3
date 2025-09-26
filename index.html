@@ -7,83 +7,63 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <!-- شاشة المقدمة -->
-  <section id="intro" class="intro-screen">
-    <div class="intro-card">
-      <h1><img src="gold-logo.png" class="gold-logo" alt=""> مستشفى ريسبكت</h1>
-      <p>اختر نوع الدخول</p>
-      <div class="intro-actions">
-        <button class="btn btn-primary" onclick="login('admin')">مشرفين الصحة والإدارة</button>
-        <button class="btn" onclick="login('viewer')">أفراد الصحة (عرض فقط)</button>
-      </div>
+  <!-- المقدمة -->
+  <div id="intro" class="intro">
+    <h1>مرحباً بك في <span>مستشفى ريسبكت</span> 🏥</h1>
+    <button onclick="enterApp()">دخول</button>
+  </div>
+
+  <!-- الهيدر -->
+  <header class="header">
+    <img src="assets/golden-logo.png" alt="شعار" class="logo">
+    <h2>مستشفى ريسبكت</h2>
+    <div class="filters">
+      <button onclick="filterCategory('all')">الكل</button>
+      <button onclick="filterCategory('فضي')">فضي</button>
+      <button onclick="filterCategory('ذهبي')">ذهبي</button>
+      <button onclick="filterCategory('بلاتيني')">بلاتيني</button>
+      <button onclick="filterCategory('منتهي')">منتهي</button>
     </div>
-  </section>
+    <input type="text" id="search" placeholder="بحث بالاسم أو الرقم الوطني" onkeyup="searchInsurance()">
+    <button onclick="openModal()">إضافة</button>
+  </header>
 
-  <!-- التطبيق -->
-  <main id="app" class="hidden">
-    <header class="header">
-      <h2 class="brand"><img src="gold-logo.png" class="gold-logo" alt=""> مستشفى ريسبكت</h2>
-      <nav class="filters" id="filters">
-        <button class="chip active" data-cat="all" onclick="filterCategory('all')">الكل</button>
-        <button class="chip chip-silver" data-cat="فضي" onclick="filterCategory('فضي')">فضي</button>
-        <button class="chip chip-gold" data-cat="ذهبي" onclick="filterCategory('ذهبي')">ذهبي</button>
-        <button class="chip chip-platinum" data-cat="بلاتيني" onclick="filterCategory('بلاتيني')">بلاتيني</button>
-        <button class="chip chip-expired" data-cat="منتهي" onclick="filterCategory('منتهي')">منتهي</button>
-      </nav>
-    </header>
+  <!-- المحتوى -->
+  <main id="cardsContainer" class="cards"></main>
 
-    <section class="actions">
-      <button id="addBtn" class="btn btn-primary" onclick="openForm()">➕ إضافة</button>
-      <input id="search" type="text" placeholder="ابحث بالاسم أو الرقم الوطني" oninput="searchRecords()" />
-      <button id="deleteAllBtn" class="btn btn-danger" onclick="confirmDeleteAll()">🗑 حذف الكل</button>
-    </section>
-
-    <section id="cards" class="cards"></section>
-  </main>
-
-  <!-- نموذج إضافة/تعديل -->
-  <div id="formModal" class="modal hidden" aria-hidden="true">
+  <!-- نافذة إضافة -->
+  <div id="modal" class="modal">
     <div class="modal-content">
-      <button class="modal-close" aria-label="إغلاق" onclick="closeForm()">×</button>
-      <h3 id="modalTitle">إضافة بيانات التأمين</h3>
-      <form id="form">
-        <input type="hidden" id="editIndex" value="">
-        <label>الاسم</label>
-        <input id="name" type="text" required placeholder="الاسم الكامل">
-
-        <label>الرقم الوطني</label>
-        <input id="nid" type="text" required placeholder="مثال: 1234567890" inputmode="numeric">
-
-        <label>الفئة</label>
+      <span class="close" onclick="closeModal()">&times;</span>
+      <h2>إضافة بيانات التأمين</h2>
+      <form id="insuranceForm">
+        <label>الاسم:</label>
+        <input type="text" id="name" required>
+        <label>الرقم الوطني:</label>
+        <input type="text" id="nationalId" required>
+        <label>الفئة:</label>
         <select id="category">
           <option value="فضي">فضي</option>
           <option value="ذهبي">ذهبي</option>
           <option value="بلاتيني">بلاتيني</option>
         </select>
-
-        <label>تاريخ الانتهاء</label>
-        <input id="expiry" type="date" required>
-
-        <label>الصورة</label>
-        <input id="image" type="file" accept="image/*">
-
-        <div class="form-actions">
-          <button type="button" class="btn" onclick="closeForm()">إلغاء</button>
-          <button type="submit" class="btn btn-primary">حفظ</button>
+        <label>تاريخ الانتهاء:</label>
+        <input type="date" id="expiryDate" required>
+        <label>الصورة:</label>
+        <input type="file" id="imageInput" accept="image/*" onchange="previewImage(event)">
+        <img id="preview" class="preview">
+        <div class="modal-actions">
+          <button type="submit">حفظ</button>
+          <button type="button" onclick="closeModal()">إلغاء</button>
         </div>
       </form>
     </div>
   </div>
 
   <!-- تكبير الصورة -->
-  <div id="imageModal" class="modal hidden">
-    <div class="modal-image">
-      <button class="modal-close right" aria-label="إغلاق" onclick="closeImage()">×</button>
-      <img id="largeImage" src="" alt="صورة">
-      <div class="image-actions">
-        <button id="removeBtn" class="btn btn-danger" onclick="confirmRemoveVisible()">إزالة</button>
-      </div>
-    </div>
+  <div id="imageModal" class="image-modal">
+    <span class="close" onclick="closeImageModal()">&times;</span>
+    <img id="modalImage" class="modal-image">
   </div>
 
   <script src="script.js"></script>
