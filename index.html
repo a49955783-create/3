@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>مستشفى ريسبكت</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- شاشة المقدمة -->
+  <section id="intro" class="intro-screen">
+    <div class="intro-card">
+      <h1><img src="gold-logo.png" class="gold-logo" alt=""> مستشفى ريسبكت</h1>
+      <p>اختر نوع الدخول</p>
+      <div class="intro-actions">
+        <button class="btn btn-primary" onclick="login('admin')">مشرفين الصحة والإدارة</button>
+        <button class="btn" onclick="login('viewer')">أفراد الصحة (عرض فقط)</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- التطبيق -->
+  <main id="app" class="hidden">
+    <header class="header">
+      <h2 class="brand"><img src="gold-logo.png" class="gold-logo" alt=""> مستشفى ريسبكت</h2>
+      <nav class="filters" id="filters">
+        <button class="chip active" data-cat="all" onclick="filterCategory('all')">الكل</button>
+        <button class="chip chip-silver" data-cat="فضي" onclick="filterCategory('فضي')">فضي</button>
+        <button class="chip chip-gold" data-cat="ذهبي" onclick="filterCategory('ذهبي')">ذهبي</button>
+        <button class="chip chip-platinum" data-cat="بلاتيني" onclick="filterCategory('بلاتيني')">بلاتيني</button>
+        <button class="chip chip-expired" data-cat="منتهي" onclick="filterCategory('منتهي')">منتهي</button>
+      </nav>
+    </header>
+
+    <section class="actions">
+      <button id="addBtn" class="btn btn-primary" onclick="openForm()">➕ إضافة</button>
+      <input id="search" type="text" placeholder="ابحث بالاسم أو الرقم الوطني" oninput="searchRecords()" />
+      <button id="deleteAllBtn" class="btn btn-danger" onclick="confirmDeleteAll()">🗑 حذف الكل</button>
+    </section>
+
+    <section id="cards" class="cards"></section>
+  </main>
+
+  <!-- نموذج إضافة/تعديل -->
+  <div id="formModal" class="modal hidden" aria-hidden="true">
+    <div class="modal-content">
+      <button class="modal-close" aria-label="إغلاق" onclick="closeForm()">×</button>
+      <h3 id="modalTitle">إضافة بيانات التأمين</h3>
+      <form id="form">
+        <input type="hidden" id="editIndex" value="">
+        <label>الاسم</label>
+        <input id="name" type="text" required placeholder="الاسم الكامل">
+
+        <label>الرقم الوطني</label>
+        <input id="nid" type="text" required placeholder="مثال: 1234567890" inputmode="numeric">
+
+        <label>الفئة</label>
+        <select id="category">
+          <option value="فضي">فضي</option>
+          <option value="ذهبي">ذهبي</option>
+          <option value="بلاتيني">بلاتيني</option>
+        </select>
+
+        <label>تاريخ الانتهاء</label>
+        <input id="expiry" type="date" required>
+
+        <label>الصورة</label>
+        <input id="image" type="file" accept="image/*">
+
+        <div class="form-actions">
+          <button type="button" class="btn" onclick="closeForm()">إلغاء</button>
+          <button type="submit" class="btn btn-primary">حفظ</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- تكبير الصورة -->
+  <div id="imageModal" class="modal hidden">
+    <div class="modal-image">
+      <button class="modal-close right" aria-label="إغلاق" onclick="closeImage()">×</button>
+      <img id="largeImage" src="" alt="صورة">
+      <div class="image-actions">
+        <button id="removeBtn" class="btn btn-danger" onclick="confirmRemoveVisible()">إزالة</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
